@@ -188,6 +188,7 @@ WireIt.WiringEditor.prototype = {
            div.appendChild( WireIt.cn('img',{src: module.container.icon}) );
         }
         div.appendChild( WireIt.cn('span', null, null, module.name) );
+        div.appendChild( WireIt.cn('a', {"href": "http://google.com", className: "Help"}, null, "[?]") );
         var ddProxy = new WireIt.ModuleProxy(div, this);
         ddProxy._module = module;
         left.appendChild(div);
