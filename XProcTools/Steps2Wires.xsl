@@ -2,13 +2,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="http://www.w3.org/ns/xproc"
       exclude-result-prefixes="xs p"
-      version="1.0">
+      version="2.0">
     <xsl:output method="text"/>
     <xsl:strip-space elements="*"/>
 
 <xsl:template match="/">
 var demoLanguage = {
-languageName: "meltingpotDemo",
+languageName: "XProc",
 propertiesFields: [
 	{"type": "string", inputParams: {"name": "name", label: "Title", typeInvite: "Enter a title" } },
 	{"type": "text", inputParams: {"name": "description", label: "Description", cols: 30} }
@@ -25,25 +25,23 @@ modules: [
         "container": {
             "xtype": "WireIt.FormContainer",
             "title": "<xsl:value-of select="@type"/>"
-            <xsl:if test="p:input">, "inputTerminals": [
-                <xsl:apply-templates select="p:input"/>
+            <xsl:if test="p:input|p:output">, "terminals": [
+                <xsl:apply-templates select="p:input"/><xsl:if test="p:input and p:output">,</xsl:if>
+		<xsl:apply-templates select="p:output"/>
                 ]</xsl:if>
-    <xsl:if test="p:output">, "outputTerminals": [
-        <xsl:apply-templates select=" p:output"/>
-        ]</xsl:if>
     <xsl:if test="p:option">, "fields": [
-        <xsl:apply-templates select=" p:option"/>
+        <xsl:apply-templates select="p:option"/>
         ]</xsl:if>
                 }
     }<xsl:if test="position() != last()">,</xsl:if>
 </xsl:template>
     
     <xsl:template match="p:input">
-        {"name": "<xsl:value-of select="@port"/>"}<xsl:if test="position() != last()">,</xsl:if>
+	    {"name": "<xsl:value-of select="@port"/>", "direction": [0,-1], "offsetPosition":{"left": <xsl:value-of select="60 + 40 * position()"/>, "top": -15}, "ddConfig": { "type": "input", "allowedTypes": ["output"]} }<xsl:if test="position() != last()">,</xsl:if>
     </xsl:template>
  
     <xsl:template match="p:output">
-        {"name": "<xsl:value-of select="@port"/>"}<xsl:if test="position() != last()">,</xsl:if>
+	    {"name": "<xsl:value-of select="@port"/>", "direction": [0,1], "offsetPosition":{"left": <xsl:value-of select="60 + 40 * position()"/>, "bottom": -15}, "ddConfig": { "type": "output", "allowedTypes": ["input"]} }<xsl:if test="position() != last()">,</xsl:if>
     </xsl:template>
     
     <xsl:template match="p:option">
