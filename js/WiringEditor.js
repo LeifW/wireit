@@ -188,11 +188,16 @@ WireIt.WiringEditor.prototype = {
            div.appendChild( WireIt.cn('img',{src: module.container.icon}) );
         }
         div.appendChild( WireIt.cn('span', null, null, module.name) );
-        div.appendChild( WireIt.cn('a', {"href": "http://google.com", className: "Help"}, null, "[?]") );
+        div.appendChild( WireIt.cn('a', {href: "c." + module.name, className: "WiringEditor-help"}, null, "[?]") );
         var ddProxy = new WireIt.ModuleProxy(div, this);
         ddProxy._module = module;
         left.appendChild(div);
      }
+
+     var div = WireIt.cn('div', {className: "WiringEditor-module"});
+     div.appendChild( WireIt.cn('span', null, null, "Eat Grouts!") );
+     left.appendChild(div);
+     
 
      // Make the layer a drag drop target
      if(!this.ddTarget) {

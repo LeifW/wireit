@@ -104,6 +104,12 @@ body {
    filter: alpha(opacity = 80);
 }
 
+.WiringEditor-help {
+  float: right;
+  position: relative;
+  top: -13px;
+}
+
 /**
  * CENTER
  */
