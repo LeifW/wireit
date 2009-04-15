@@ -45,14 +45,14 @@ modules: [
     </xsl:template>
     
     <xsl:template match="p:option">
-	    {<xsl:apply-templates mode="type" select="@e:type"/>"inputParams": {"label": "<xsl:value-of select="@name"/>"<xsl:apply-templates select="@name|@required"/> } }<xsl:if test="position() != last()">,</xsl:if>
+	    {<xsl:apply-templates  select="@e:type"/>"inputParams": {"label": "<xsl:value-of select="@name"/>"<xsl:apply-templates select="@name|@required"/> } }<xsl:if test="position() != last()">,</xsl:if>
     </xsl:template>
      
     <xsl:template match="@name|@required">, "<xsl:value-of select="name()"/>": "<xsl:value-of select="."/>"</xsl:template>
 	    
     <xsl:template match="@select">, "value": "<xsl:value-of select="substring(., 2, string-length()-2)"/>"</xsl:template>
 
-    <xsl:template mode="type" match="@e:type[.='xsd:boolean']">"type": "boolean", </xsl:template>
-    <xsl:template mode="type" match="@e:type"/>
+    <xsl:template match="@e:type[.='xsd:boolean']">"type": "boolean", </xsl:template>
+    <xsl:template match="@e:type"/>
 
 </xsl:stylesheet>
