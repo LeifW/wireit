@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="http://www.w3.org/ns/xproc" xmlns:e="http://www.w3.org/1999/XSL/Spec/ElementSyntax"
       exclude-result-prefixes="xs p"
       version="2.0">
     <xsl:output method="text"/>
@@ -45,12 +45,14 @@ modules: [
     </xsl:template>
     
     <xsl:template match="p:option">
-	    {"inputParams": {"label": "<xsl:value-of select="@name"/>"<xsl:apply-templates select="@*"/> } }<xsl:if test="position() != last()">,</xsl:if>
+	    {<xsl:apply-templates mode="type" select="@e:type"/>"inputParams": {"label": "<xsl:value-of select="@name"/>"<xsl:apply-templates select="@name|@required"/> } }<xsl:if test="position() != last()">,</xsl:if>
     </xsl:template>
      
-    
-    <xsl:template match="@*">, "<xsl:value-of select="name()"/>": "<xsl:value-of select="."/>"</xsl:template>
+    <xsl:template match="@name|@required">, "<xsl:value-of select="name()"/>": "<xsl:value-of select="."/>"</xsl:template>
 	    
     <xsl:template match="@select">, "value": "<xsl:value-of select="substring(., 2, string-length()-2)"/>"</xsl:template>
+
+    <xsl:template mode="type" match="@e:type[.='xsd:boolean']">"type": "boolean", </xsl:template>
+    <xsl:template mode="type" match="@e:type"/>
 
 </xsl:stylesheet>
