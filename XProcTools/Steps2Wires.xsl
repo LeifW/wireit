@@ -7,7 +7,7 @@
     <xsl:strip-space elements="*"/>
 
 <xsl:template match="/">
-var demoLanguage = {
+var xproc = {
 languageName: "XProc",
 propertiesFields: [
 	{"type": "string", inputParams: {"name": "name", label: "Title", typeInvite: "Enter a title" } },
@@ -24,11 +24,11 @@ modules: [
         "name": "<xsl:value-of select="substring(@type,3)"/>",
         "container": {
             "xtype": "WireIt.FormContainer",
-            "title": "<xsl:value-of select="@type"/>"
-            <xsl:if test="p:input|p:output">, "terminals": [
+            "title": "<xsl:value-of select="@type"/>",
+            "terminals": [
                 <xsl:apply-templates select="p:input"/><xsl:if test="p:input and p:output">,</xsl:if>
 		<xsl:apply-templates select="p:output"/>
-                ]</xsl:if>
+                ]
     <xsl:if test="p:option">, "fields": [
         <xsl:apply-templates select="p:option"/>
         ]</xsl:if>
@@ -45,14 +45,23 @@ modules: [
     </xsl:template>
     
     <xsl:template match="p:option">
-	    {<xsl:apply-templates  select="@e:type"/>"inputParams": {"label": "<xsl:value-of select="@name"/>"<xsl:apply-templates select="@name|@required"/> } }<xsl:if test="position() != last()">,</xsl:if>
+	    {<xsl:apply-templates mode="type" select="@e:type"/>"inputParams": {"label": "<xsl:value-of select="@name"/>"<xsl:apply-templates select="@select|@name|@required|@e:type[contains(., '|')]"/> } }<xsl:if test="position() != last()">,</xsl:if>
     </xsl:template>
      
     <xsl:template match="@name|@required">, "<xsl:value-of select="name()"/>": "<xsl:value-of select="."/>"</xsl:template>
 	    
+    <!-- No quotes around booleans -->
+    <xsl:template match="@select[../@e:type='xsd:boolean']">, "value": <xsl:value-of select="substring(., 2, string-length()-2)"/></xsl:template>
+    <!-- Otherwise, quote the value -->
     <xsl:template match="@select">, "value": "<xsl:value-of select="substring(., 2, string-length()-2)"/>"</xsl:template>
 
-    <xsl:template match="@e:type[.='xsd:boolean']">"type": "boolean", </xsl:template>
-    <xsl:template match="@e:type"/>
+    <xsl:template match="@e:type[contains(.,'|')]">, "selectValues": [<xsl:value-of select="concat('''', replace(.,'\|', ''', '''), '''')"/>]</xsl:template>
+
+    <xsl:template mode="type" match="@e:type[.='xsd:boolean']">"type": "boolean", </xsl:template>
+    <xsl:template mode="type" match="@e:type[.='xsd:integer']">"type": "integer", </xsl:template>
+    <xsl:template mode="type" match="@e:type[.='xsd:anyURI']">"type": "url", </xsl:template>
+    <xsl:template mode="type" match="@e:type[contains(.,'|')]">"type": "select", </xsl:template>
+    <!-- Treat the other types as strings, don't leave a type signature: -->
+    <xsl:template mode="type" match="@e:type"/>
 
 </xsl:stylesheet>
