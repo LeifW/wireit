@@ -188,7 +188,7 @@ WireIt.WiringEditor.prototype = {
            div.appendChild( WireIt.cn('img',{src: module.container.icon}) );
         }
         div.appendChild( WireIt.cn('span', null, null, module.name) );
-        div.appendChild( WireIt.cn('a', {href: "c." + module.name, className: "WiringEditor-help"}, null, "[?]") );
+        div.appendChild( WireIt.cn('a', {href: "http://www.w3.org/TR/xproc/#c." + module.name, className: "WiringEditor-help"}, null, "[?]") );
         var ddProxy = new WireIt.ModuleProxy(div, this);
         ddProxy._module = module;
         left.appendChild(div);
@@ -285,6 +285,9 @@ WireIt.WiringEditor.prototype = {
     
     var value = this.getValue();
     
+    //TODO: Testing
+    alert(JSON.stringify(value));
+
     if(value.name == "") {
        alert("Please choose a name");
        return;
